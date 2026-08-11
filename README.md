@@ -46,4 +46,4 @@ repo/          signed local package repository
 
 ## License
 
-GPL-3.0-or-later unless otherwise noted.
+GPL-3.0-or-later. See [LICENSE](LICENSE).
