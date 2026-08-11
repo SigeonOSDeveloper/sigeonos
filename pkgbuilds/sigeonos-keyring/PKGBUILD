@@ -1,0 +1,21 @@
+# Maintainer: Sigeon OS Team <packager@sigeonos.org>
+pkgname=sigeonos-keyring
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Sigeon OS packager PGP keyring for pacman"
+arch=('any')
+url="https://sigeonos.org"
+license=('GPL-3.0-or-later')
+depends=('pacman')
+source=(
+  'sigeonos.gpg'
+  'sigeonos-trusted'
+  'sigeonos-keyring.hook'
+)
+sha256sums=('SKIP' 'SKIP' 'SKIP')
+
+package() {
+  install -Dm644 "$srcdir/sigeonos.gpg" "$pkgdir/usr/share/pacman/keyrings/sigeonos.gpg"
+  install -Dm644 "$srcdir/sigeonos-trusted" "$pkgdir/usr/share/pacman/keyrings/sigeonos-trusted"
+  install -Dm644 "$srcdir/sigeonos-keyring.hook" "$pkgdir/usr/share/libalpm/hooks/sigeonos-keyring.hook"
+}

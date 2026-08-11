@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Sigeon Drivers
+Comment=Install GPU, CPU, audio and printer drivers
+Exec=sigeon-drivers
+Icon=sigeon-drivers
+Terminal=false
+Categories=System;Settings;X-Sigeon;
+StartupNotify=true

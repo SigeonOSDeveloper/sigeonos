@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Sigeon OS Installer
+Name[pl]=Instalator Sigeon OS
+Comment=Install Sigeon OS to disk
+Comment[pl]=Zainstaluj Sigeon OS na dysku
+Exec=calamares
+Icon=drive-harddisk
+Terminal=false
+Type=Application
+Categories=System;Settings;

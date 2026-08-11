@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Sigeon Hello
+Comment=First-run setup for Sigeon OS
+Exec=sigeon-hello
+Icon=sigeon-hello
+Terminal=false
+Categories=System;Settings;X-Sigeon;
+StartupNotify=true

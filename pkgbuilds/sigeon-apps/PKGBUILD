@@ -1,0 +1,51 @@
+# Maintainer: Sigeon OS <https://github.com/SigeonOSDeveloper>
+pkgname=sigeon-apps
+pkgver=1.0.0
+pkgrel=13
+pkgdesc="Sigeon OS first-party apps: Hello, Updater, Drivers, DaVinci installer and Flathub Store (GTK4)"
+arch=('x86_64')
+url="https://github.com/SigeonOSDeveloper"
+license=('GPL-3.0-or-later')
+depends=('gtkmm-4.0' 'curl' 'pciutils' 'polkit' 'bash' 'flatpak' 'libxml2')
+makedepends=('cmake' 'ninja' 'gtkmm-4.0' 'libxml2')
+source=(
+  'CMakeLists.txt'
+  'common.hpp'
+  'sigeon-hello.cpp'
+  'sigeon-updater.cpp'
+  'sigeon-drivers.cpp'
+  'sigeon-davinci.cpp'
+  'sigeon-store.cpp'
+  'sigeon-hello.desktop'
+  'sigeon-hello-autostart.desktop'
+  'sigeon-updater.desktop'
+  'sigeon-drivers.desktop'
+  'sigeon-davinci.desktop'
+  'sigeon-store.desktop'
+  'logo.png'
+)
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+
+build() {
+  cmake -B build -G Ninja \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr
+  cmake --build build
+}
+
+package() {
+  DESTDIR="$pkgdir" cmake --install build
+  
+  install -Dm644 sigeon-hello.desktop "$pkgdir/usr/share/applications/sigeon-hello.desktop"
+  install -Dm644 sigeon-hello-autostart.desktop "$pkgdir/etc/xdg/autostart/sigeon-hello.desktop"
+  install -Dm644 sigeon-updater.desktop "$pkgdir/usr/share/applications/sigeon-updater.desktop"
+  install -Dm644 sigeon-drivers.desktop "$pkgdir/usr/share/applications/sigeon-drivers.desktop"
+  install -Dm644 sigeon-davinci.desktop "$pkgdir/usr/share/applications/sigeon-davinci.desktop"
+  install -Dm644 sigeon-store.desktop "$pkgdir/usr/share/applications/sigeon-store.desktop"
+  
+  install -Dm644 logo.png "$pkgdir/usr/share/pixmaps/sigeon-hello.png"
+  install -Dm644 logo.png "$pkgdir/usr/share/pixmaps/sigeon-updater.png"
+  install -Dm644 logo.png "$pkgdir/usr/share/pixmaps/sigeon-drivers.png"
+  install -Dm644 logo.png "$pkgdir/usr/share/pixmaps/sigeon-davinci.png"
+  install -Dm644 logo.png "$pkgdir/usr/share/pixmaps/sigeon-store.png"
+}

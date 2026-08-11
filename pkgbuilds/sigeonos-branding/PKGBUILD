@@ -1,0 +1,29 @@
+# Maintainer: Sigeon OS Team <packager@sigeonos.org>
+pkgname=sigeonos-branding
+pkgver=1.0.0
+pkgrel=8
+pkgdesc="Sigeon OS branding: logo, wallpaper, default XFCE look and feel"
+arch=('any')
+url="https://sigeonos.org"
+license=('GPL-3.0-or-later')
+depends=('bash')
+source=(
+  'os-release'
+  'motd'
+  'logo.png'
+  'wallpaper.png'
+  'appicon.png'
+  'wallpaper-bg.png'
+  'xfce4-desktop.xml'
+)
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+
+package() {
+  install -Dm644 "$srcdir/os-release" "$pkgdir/etc/os-release"
+  install -Dm644 "$srcdir/motd" "$pkgdir/etc/motd"
+  install -Dm644 "$srcdir/logo.png" "$pkgdir/usr/share/sigeonos/logo.png"
+  install -Dm644 "$srcdir/wallpaper.png" "$pkgdir/usr/share/sigeonos/wallpaper.png"
+  install -Dm644 "$srcdir/appicon.png" "$pkgdir/usr/share/sigeonos/appicon.png"
+  install -Dm644 "$srcdir/wallpaper-bg.png" "$pkgdir/usr/share/backgrounds/sigeonos/wallpaper.png"
+  install -Dm644 "$srcdir/xfce4-desktop.xml" "$pkgdir/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml"
+}

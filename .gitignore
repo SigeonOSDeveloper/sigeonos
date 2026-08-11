@@ -1,0 +1,14 @@
+work*/
+out/
+build.log
+*.pkg.tar.zst
+*.pkg.tar
+*.pkg.tar.zst.sig
+repo/*.db*
+repo/*.files*
+repo/*.sig
+repo/*/
+keys/
+.gpg/
+pkgbuilds/*/src/
+pkgbuilds/*/pkg/

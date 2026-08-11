@@ -1,0 +1,43 @@
+# Sigeon OS branding for the Calamares installer.
+componentName:  sigeonos
+
+welcomeStyleCalamares:   false
+
+welcomeExpandingLogo:   true
+
+windowExpanding:    normal
+
+windowSize: 1024px,735px
+
+windowPlacement: center
+
+sidebar: widget
+
+navigation: widget
+
+strings:
+    productName:         Sigeon OS
+    shortProductName:    Sigeon OS
+    version:             2026.08.01
+    shortVersion:        2026.08.01
+    versionedName:       Sigeon OS
+    shortVersionedName:  Sigeon OS
+    bootloaderEntryName: Sigeon OS
+
+images:
+    productIcon:         "logo.png"
+    productLogo:         "logo.png"
+    productWallpaper:    "wallpaper.png"
+    productWelcome:      "logo.png"
+
+style:
+   SidebarBackground:    "#292F34"
+   SidebarText:          "#FFFFFF"
+
+slideshow:               "show.qml"
+
+slideshowAPI: 2
+
+uploadServer :
+    type :    "none"
+    url :     ""

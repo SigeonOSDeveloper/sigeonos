@@ -1,0 +1,11 @@
+NAME="Sigeon OS"
+PRETTY_NAME="Sigeon OS"
+ID=sigeonos
+ID_LIKE=arch
+BUILD_ID=rolling
+ANSI_COLOR="38;2;23;147;209"
+HOME_URL="https://sigeonos.org"
+SUPPORT_URL="https://sigeonos.org"
+BUG_REPORT_URL="https://sigeonos.org"
+DOCUMENTATION_URL="https://sigeonos.org"
+LOGO=sigeonos

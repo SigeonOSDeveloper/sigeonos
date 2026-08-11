@@ -1,0 +1,53 @@
+# Maintainer: Sigeon OS Team <packager@sigeonos.org>
+pkgname=sigeonos-calamares-config
+pkgver=1.0.0
+pkgrel=2
+pkgdesc="Calamares installer configuration and branding for Sigeon OS"
+arch=('any')
+url="https://sigeonos.org"
+license=('GPL-3.0-or-later')
+depends=('calamares')
+source=(
+  'settings.conf'
+  'module-bootloader.conf'
+  'module-displaymanager.conf'
+  'module-finished.conf'
+  'module-grubcfg.conf'
+  'module-initcpio.conf'
+  'module-locale.conf'
+  'module-mount.conf'
+  'module-partition.conf'
+  'module-preservefiles.conf'
+  'module-services-systemd.conf'
+  'module-shellprocess-cleanup.conf'
+  'module-unpackfs.conf'
+  'module-users.conf'
+  'module-welcome.conf'
+  'branding.desc'
+  'show.qml'
+  'logo.png'
+  'wallpaper.png'
+)
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+
+package() {
+  install -Dm644 "$srcdir/settings.conf" "$pkgdir/etc/calamares/settings.conf"
+  install -Dm644 "$srcdir/module-bootloader.conf" "$pkgdir/etc/calamares/modules/bootloader.conf"
+  install -Dm644 "$srcdir/module-displaymanager.conf" "$pkgdir/etc/calamares/modules/displaymanager.conf"
+  install -Dm644 "$srcdir/module-finished.conf" "$pkgdir/etc/calamares/modules/finished.conf"
+  install -Dm644 "$srcdir/module-grubcfg.conf" "$pkgdir/etc/calamares/modules/grubcfg.conf"
+  install -Dm644 "$srcdir/module-initcpio.conf" "$pkgdir/etc/calamares/modules/initcpio.conf"
+  install -Dm644 "$srcdir/module-locale.conf" "$pkgdir/etc/calamares/modules/locale.conf"
+  install -Dm644 "$srcdir/module-mount.conf" "$pkgdir/etc/calamares/modules/mount.conf"
+  install -Dm644 "$srcdir/module-partition.conf" "$pkgdir/etc/calamares/modules/partition.conf"
+  install -Dm644 "$srcdir/module-preservefiles.conf" "$pkgdir/etc/calamares/modules/preservefiles.conf"
+  install -Dm644 "$srcdir/module-services-systemd.conf" "$pkgdir/etc/calamares/modules/services-systemd.conf"
+  install -Dm644 "$srcdir/module-shellprocess-cleanup.conf" "$pkgdir/etc/calamares/modules/shellprocess-cleanup.conf"
+  install -Dm644 "$srcdir/module-unpackfs.conf" "$pkgdir/etc/calamares/modules/unpackfs.conf"
+  install -Dm644 "$srcdir/module-users.conf" "$pkgdir/etc/calamares/modules/users.conf"
+  install -Dm644 "$srcdir/module-welcome.conf" "$pkgdir/etc/calamares/modules/welcome.conf"
+  install -Dm644 "$srcdir/branding.desc" "$pkgdir/usr/share/calamares/branding/sigeonos/branding.desc"
+  install -Dm644 "$srcdir/show.qml" "$pkgdir/usr/share/calamares/branding/sigeonos/show.qml"
+  install -Dm644 "$srcdir/logo.png" "$pkgdir/usr/share/calamares/branding/sigeonos/logo.png"
+  install -Dm644 "$srcdir/wallpaper.png" "$pkgdir/usr/share/calamares/branding/sigeonos/wallpaper.png"
+}

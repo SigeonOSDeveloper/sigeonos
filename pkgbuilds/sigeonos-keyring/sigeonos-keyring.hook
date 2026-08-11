@@ -1,0 +1,11 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = File
+Target = usr/share/pacman/keyrings/sigeonos.gpg
+
+[Action]
+Description = Populating Sigeon OS keyring...
+When = PostTransaction
+Depends = pacman
+Exec = /usr/bin/sh -c 'pacman-key --populate sigeonos 2>/dev/null || true'

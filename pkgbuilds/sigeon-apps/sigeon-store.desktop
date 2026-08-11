@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Sigeon Store
+Name[pl]=Sklep Sigeon
+Comment=Browse and install apps from Flathub
+Comment[pl]=Przeglądaj i instaluj aplikacje z Flathub
+GenericName=Application Store
+Categories=System;PackageManager;
+Exec=sigeon-store
+Icon=sigeon-store
+Terminal=false
+StartupNotify=true
