@@ -167,6 +167,17 @@ section h2::before {
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
 }
 
+.requirements { text-align: center; }
+.req-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  max-width: 780px;
+  margin: 0 auto;
+}
+.req-grid .card h3 { color: var(--text); }
+.req-grid .card p { color: var(--muted); }
+
 .download, .install { text-align: center; }
 
 .dl-box {
