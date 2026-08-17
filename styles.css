@@ -176,7 +176,9 @@ section h2::before {
   margin: 0 auto;
 }
 .req-grid .card h3 { color: var(--text); }
-.req-grid .card p { color: var(--muted); }
+.req-grid .card p { margin-bottom: 0.25rem; }
+.req-min { color: var(--muted); font-size: 0.95rem; }
+.req-rec { color: var(--accent); font-size: 0.95rem; }
 
 .download, .install { text-align: center; }
 
