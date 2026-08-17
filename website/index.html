@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sigeon OS — Simple. Fast. Arch.</title>
+<meta name="description" content="Sigeon OS is an Arch-based Linux distribution with a fast XFCE desktop, one-click driver installation and an easy Calamares installer.">
+<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#">
+      <img src="assets/logo.png" alt="Sigeon OS logo" class="brand-logo">
+      <span class="brand-name">Sigeon OS</span>
+    </a>
+    <nav>
+      <a href="#features">Features</a>
+      <a href="#download">Download</a>
+      <a href="#install">Install</a>
+      <a href="https://github.com/SigeonOSDeveloper/sigeonos" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <img src="assets/logo.png" alt="Sigeon OS logo" class="hero-logo">
+    <h1>Sigeon OS</h1>
+    <p class="tagline">Simple. Fast. Arch.</p>
+    <p class="sub">A fast, friendly Arch-based Linux distribution with everything you need to get started — and nothing you don't.</p>
+    <a class="btn btn-primary" href="#download">Download now</a>
+  </section>
+
+  <section id="features" class="features">
+    <h2>Why Sigeon OS?</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Lightweight XFCE desktop</h3>
+        <p>A clean, familiar desktop that stays snappy even on modest hardware, pre-configured with a single taskbar and a good default theme.</p>
+      </div>
+      <div class="card">
+        <h3>One-click driver install</h3>
+        <p>The built-in Drivers app detects your NVIDIA, AMD or Intel GPU and installs the correct drivers — including proprietary ones from AUR.</p>
+      </div>
+      <div class="card">
+        <h3>Easy installer</h3>
+        <p>Calamares takes you from live ISO to a fully installed system in minutes, with a persistent pacman keyring and working network out of the box.</p>
+      </div>
+      <div class="card">
+        <h3>Works offline, out of the box</h3>
+        <p>The live ISO ships with the latest package databases baked in, so installing and updating software works even before your first sync.</p>
+      </div>
+      <div class="card">
+        <h3>Rolling releases</h3>
+        <p>Based on Arch Linux — always current software, and every package you know from the Arch repositories.</p>
+      </div>
+      <div class="card">
+        <h3>Open source</h3>
+        <p>Everything is built in the open on GitHub under the GPL-3.0 license. Build it, tweak it, fork it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="screenshot" class="screenshot">
+    <h2>Take a look</h2>
+    <img src="assets/wallpaper.png" alt="Sigeon OS default wallpaper">
+  </section>
+
+  <section id="download" class="download">
+    <h2>Download Sigeon OS</h2>
+    <div class="dl-box">
+      <div class="dl-meta">
+        <span class="dl-version">sigeonos-1.0-x86_64.iso</span>
+        <span class="dl-size">2.1 GB · x86_64</span>
+      </div>
+      <!-- TODO: replace with the real Internet Archive item link -->
+      <a class="btn btn-primary btn-big" href="https://archive.org/download/sigeonos/sigeonos-1.0-x86_64.iso">Download ISO</a>
+      <p class="checksum">SHA-256:<br><code>63675d5f2d590de988aa6a273b1e3f1f7954936ae59bbba316bcdbdc74e5481c</code></p>
+      <p class="hint">After downloading, verify the checksum above matches your file.</p>
+    </div>
+  </section>
+
+  <section id="install" class="install">
+    <h2>Flash it to a USB stick</h2>
+    <p>Write the ISO to a USB drive (at least 4 GB) with <code>dd</code>. Make sure <code>/dev/sdX</code> is the right disk — it will be wiped!</p>
+    <pre><code>dd bs=4M status=progress of=/dev/sdX if=sigeonos-1.0-x86_64.iso conv=fsync</code></pre>
+    <p class="hint">Boot the stick, and the Calamares installer will walk you through the installation.</p>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; 2026 Sigeon OS. Built on <a href="https://archlinux.org" target="_blank" rel="noopener">Arch Linux</a> · <a href="https://github.com/SigeonOSDeveloper/sigeonos" target="_blank" rel="noopener">Source on GitHub</a></p>
+</footer>
+
+</body>
+</html>

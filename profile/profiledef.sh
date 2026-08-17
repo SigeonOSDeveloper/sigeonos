@@ -5,7 +5,7 @@ iso_name="sigeonos"
 iso_label="SIGEONOS_$(date --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" +%Y%m)"
 iso_publisher="Sigeon OS <https://github.com/SigeonOSDeveloper>"
 iso_application="Sigeon OS Live/Rescue DVD"
-iso_version="$(date --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" +%Y.%m.%d)"
+iso_version="1.0"
 install_dir="sigeonos"
 buildmodes=('iso')
 bootmodes=('bios.syslinux'
