@@ -4,6 +4,7 @@ arch-install-scripts
 archinstall
 b43-fwcutter
 base
+base-devel
 bcachefs-tools
 bind
 bolt
@@ -30,10 +31,13 @@ exfatprogs
 f2fs-tools
 fatresize
 firefox
+fastfetch
+hyfetch
 flatpak
 foot-terminfo
 fsarchiver
 ghostty-terminfo
+git
 gpart
 gpm
 gptfdisk
@@ -140,6 +144,7 @@ xfce4
 xfce4-goodies
 lightdm
 lightdm-gtk-greeter
+polkit-gnome
 networkmanager
 network-manager-applet
 gvfs

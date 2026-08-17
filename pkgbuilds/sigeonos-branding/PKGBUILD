@@ -1,10 +1,10 @@
-# Maintainer: Sigeon OS Team <packager@sigeonos.org>
+# Maintainer: Sigeon OS <https://github.com/SigeonOSDeveloper>
 pkgname=sigeonos-branding
 pkgver=1.0.0
-pkgrel=8
-pkgdesc="Sigeon OS branding: logo, wallpaper, default XFCE look and feel"
+pkgrel=10
+pkgdesc="Sigeon OS branding: logo, wallpaper, fetch ascii art, default XFCE look and feel"
 arch=('any')
-url="https://sigeonos.org"
+url="https://github.com/SigeonOSDeveloper"
 license=('GPL-3.0-or-later')
 depends=('bash')
 source=(
@@ -15,8 +15,11 @@ source=(
   'appicon.png'
   'wallpaper-bg.png'
   'xfce4-desktop.xml'
+  'fetch-logo.txt'
+  'fastfetch-config.jsonc'
+  'neofetch-config.conf'
 )
-sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
 
 package() {
   install -Dm644 "$srcdir/os-release" "$pkgdir/etc/os-release"
@@ -26,4 +29,8 @@ package() {
   install -Dm644 "$srcdir/appicon.png" "$pkgdir/usr/share/sigeonos/appicon.png"
   install -Dm644 "$srcdir/wallpaper-bg.png" "$pkgdir/usr/share/backgrounds/sigeonos/wallpaper.png"
   install -Dm644 "$srcdir/xfce4-desktop.xml" "$pkgdir/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml"
+  install -Dm644 "$srcdir/fetch-logo.txt" "$pkgdir/usr/share/sigeonos/fetch-logo.txt"
+  install -Dm644 "$srcdir/fastfetch-config.jsonc" "$pkgdir/etc/xdg/fastfetch/config.jsonc"
+  install -Dm644 "$srcdir/neofetch-config.conf" "$pkgdir/etc/skel/.config/neofetch/config.conf"
+  install -Dm644 "$srcdir/neofetch-config.conf" "$pkgdir/root/.config/neofetch/config.conf"
 }

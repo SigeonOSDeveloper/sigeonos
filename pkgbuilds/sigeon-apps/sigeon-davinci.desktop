@@ -5,5 +5,5 @@ Comment=Install DaVinci Resolve on Sigeon OS
 Exec=sigeon-davinci
 Icon=sigeon-davinci
 Terminal=false
-Categories=Multimedia;X-Sigeon;
+Categories=AudioVideo;X-Sigeon;
 StartupNotify=true

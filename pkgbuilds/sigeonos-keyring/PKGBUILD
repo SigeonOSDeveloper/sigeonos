@@ -1,10 +1,10 @@
-# Maintainer: Sigeon OS Team <packager@sigeonos.org>
+# Maintainer: Sigeon OS <https://github.com/SigeonOSDeveloper>
 pkgname=sigeonos-keyring
 pkgver=1.0.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Sigeon OS packager PGP keyring for pacman"
 arch=('any')
-url="https://sigeonos.org"
+url="https://github.com/SigeonOSDeveloper"
 license=('GPL-3.0-or-later')
 depends=('pacman')
 source=(

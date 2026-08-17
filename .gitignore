@@ -1,5 +1,6 @@
 work*/
 out/
+iso-check/
 build.log
 *.pkg.tar.zst
 *.pkg.tar

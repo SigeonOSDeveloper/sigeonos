@@ -285,6 +285,7 @@ private:
     Glib::Dispatcher disp_;
     std::mutex mtx_;
     std::vector<std::function<void()>> queue_;
+    bool closing_ = false;
 
     // icon downloader pool
     std::deque<std::string> icon_queue_;
@@ -292,15 +293,37 @@ private:
     std::condition_variable icon_cv_;
     bool icon_pool_done_ = false;
     unsigned icon_workers_ = 0;
+    std::vector<std::thread> icon_worker_threads_;
+
+    ~StoreWindow() override {
+        {
+            std::lock_guard<std::mutex> lk(mtx_);
+            closing_ = true;
+        }
+        {
+            std::lock_guard<std::mutex> lk(icon_mtx_);
+            icon_pool_done_ = true;
+        }
+        icon_cv_.notify_all();
+        for (auto& t : icon_worker_threads_) if (t.joinable()) t.join();
+    }
 
     void post(const std::function<void()>& fn) {
-        { std::lock_guard<std::mutex> lk(mtx_); queue_.push_back(fn); }
+        {
+            std::lock_guard<std::mutex> lk(mtx_);
+            if (closing_) return;
+            queue_.push_back(fn);
+        }
         disp_.emit();
     }
 
     void drain() {
         std::vector<std::function<void()>> tmp;
-        { std::lock_guard<std::mutex> lk(mtx_); tmp.swap(queue_); }
+        {
+            std::lock_guard<std::mutex> lk(mtx_);
+            if (closing_) return;
+            tmp.swap(queue_);
+        }
         for (auto& fn : tmp) fn();
     }
 
@@ -310,7 +333,7 @@ private:
         if (ok && time(nullptr) - st.st_mtime < 6 * 3600)
             return "using cached catalog";
         std::string out = sig::run_capture(
-            {"curl", "-sS", "-f", "-L", "-o", catalog_path_, CATALOG_URL});
+            {"curl", "-sS", "-f", "-L", "--max-time", "120", "-o", catalog_path_, CATALOG_URL});
         if (out.empty()) return "catalog up to date";
         return "updated (" + sig::trim(out) + ")";
     }
@@ -411,7 +434,8 @@ private:
 
         auto* v = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::VERTICAL, 4);
         auto* name = Gtk::make_managed<Gtk::Label>();
-        name->set_markup(Glib::ustring::compose("<span size='x-large' weight='bold'>%1</span>", a.name));
+        name->set_markup(Glib::ustring::compose("<span size='x-large' weight='bold'>%1</span>",
+            Glib::Markup::escape_text(a.name)));
         name->set_xalign(0);
         name->set_wrap(true);
         v->append(*name);
@@ -430,8 +454,8 @@ private:
 
         Glib::ustring meta = (a.developer.empty() ? "Unknown developer" : a.developer);
         if (!a.license.empty()) meta += "  |  License: " + a.license;
-        auto* m = Gtk::make_managed<Gtk::Label>("<span size='small'>" + meta + "</span>");
-        m->set_markup("<span size='small'>" + meta + "</span>");
+        auto* m = Gtk::make_managed<Gtk::Label>();
+        m->set_markup("<span size='small'>" + Glib::Markup::escape_text(meta) + "</span>");
         m->set_xalign(0);
         m->get_style_context()->add_class("dim-label");
         v->append(*m);
@@ -496,7 +520,8 @@ private:
         tile->append(*pic);
 
         auto* name = Gtk::make_managed<Gtk::Label>();
-        name->set_markup(Glib::ustring::compose("<b>%1</b>", a.name));
+        name->set_markup(Glib::ustring::compose("<b>%1</b>",
+            Glib::Markup::escape_text(a.name)));
         name->set_xalign(0.5f);
         name->set_wrap(true);
         name->set_lines(2);
@@ -533,20 +558,34 @@ private:
         busy_ = true;
         term_->log((inst ? "Removing " : "Installing ") + appid + "...\n");
         std::thread([this, appid, inst] {
-            std::string out;
+            std::string cmd_str;
+            std::vector<std::string> args;
             if (inst) {
-                out = sig::run_capture({"pkexec", "flatpak", "uninstall",
-                    "-y", "--system", "--noninteractive", appid});
+                args = {"pkexec", "flatpak", "uninstall", "-y", "--system", "--noninteractive", appid};
             } else {
-                out = sig::run_capture({"pkexec", "flatpak", "install",
-                    "-y", "--system", "--noninteractive", "--or-update", "flathub", appid});
+                std::string install_cmd =
+                    "flatpak remote-add --if-not-exists --system flathub "
+                    "https://flathub.org/repo/flathub.flatpkgrepo && "
+                    "flatpak install -y --system --noninteractive --or-update flathub " + appid;
+                args = {"pkexec", "sh", "-c", "'" + install_cmd + "'"};
             }
-            post([this, out, appid, inst] {
+            for (const auto& a : args) cmd_str += a + " ";
+            term_->log("$ " + cmd_str + "\n");
+            int status = sig::run_stream(args, [this](const char* line) {
+                std::string s(line);
+                this->post([this, s] { this->term_->log(s); });
+            });
+            post([this, appid, inst, status] {
                 busy_ = false;
-                term_->log(out);
-                if (inst) installed_.erase(appid);
-                else installed_.insert(appid);
-                status_label_->set_text(inst ? "Application removed." : "Application installed.");
+                if (status == 0) {
+                    term_->log("\nOperation completed successfully.\n");
+                    if (inst) installed_.erase(appid);
+                    else installed_.insert(appid);
+                    status_label_->set_text(inst ? "Application removed." : "Application installed.");
+                } else {
+                    term_->log("\nOperation failed with exit code " + std::to_string(status) + ".\n");
+                    status_label_->set_text("Operation failed.");
+                }
                 rebuild_tiles();
             });
         }).detach();
@@ -559,7 +598,7 @@ private:
         status_label_->set_text("Refreshing catalog...");
         term_->log("Refreshing Flathub catalog...\n");
         std::thread([this] {
-            std::string dlout = sig::run_capture({"curl", "-sS", "-f", "-L", "-o", catalog_path_, CATALOG_URL});
+            std::string dlout = sig::run_capture({"curl", "-sS", "-f", "-L", "--max-time", "120", "-o", catalog_path_, CATALOG_URL});
             auto apps = parse_appstream(catalog_path_);
             post([this, apps, dlout] {
                 busy_ = false;
@@ -583,7 +622,7 @@ private:
             icon_queue_.push_back(appid + "|" + icontxt);
             if (icon_workers_ < 6) {
                 icon_workers_++;
-                std::thread([this] { icon_worker(); }).detach();
+                icon_worker_threads_.emplace_back([this] { icon_worker(); });
             }
         }
         icon_cv_.notify_one();
@@ -608,7 +647,7 @@ private:
             std::string path = cache_dir_ + "/icons/" + ic;
             if (!std::filesystem::exists(path)) {
                 sig::run_capture({"curl", "-sS", "-f", "-L", "--connect-timeout",
-                    "10", "-o", path, ICON_BASE + ic});
+                    "10", "--max-time", "60", "-o", path, ICON_BASE + ic});
             }
             post([this, appid, path] {
                 icon_inflight_.erase(appid);

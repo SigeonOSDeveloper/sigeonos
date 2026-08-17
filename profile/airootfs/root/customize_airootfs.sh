@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 set -e
 
+# Ship current pacman sync databases (core.db, extra.db) inside the ISO so the
+# live system can resolve/install packages without downloading the databases
+# first. archiso's _cleanup_pacstrap_dir() deletes /var/lib/pacman/sync AFTER
+# this script runs, so the dbs cannot be restored here -- they are restored at
+# boot from /usr/share/sigeonos/pacman-sync by sigeonos-sync-db.service.
+ln -sf /etc/systemd/system/sigeonos-sync-db.service \
+    /etc/systemd/system/multi-user.target.wants/sigeonos-sync-db.service
+
 # The sigeonos packages are built into the ISO already, and there is no
 # public repository yet, so no [sigeonos] repo is configured on the medium.
 
@@ -9,6 +17,21 @@ if ! getent group autologin >/dev/null 2>&1; then
     groupadd -r autologin
 fi
 usermod -aG autologin root
+
+# Start the desktop on the live medium (root autologin configured above).
+# Use a direct symlink: archiso's 99-default.preset ships "disable *", which
+# makes "systemctl enable lightdm" silently do nothing in the build chroot.
+ln -sf /usr/lib/systemd/system/lightdm.service \
+    /etc/systemd/system/multi-user.target.wants/lightdm.service
+
+# Same for the network stack: archiso's "disable *" preset silently no-ops
+# systemctl enable, so the live system must wire the units by symlink too.
+ln -sf /usr/lib/systemd/system/NetworkManager.service \
+    /etc/systemd/system/multi-user.target.wants/NetworkManager.service
+ln -sf /usr/lib/systemd/system/systemd-resolved.service \
+    /etc/systemd/system/multi-user.target.wants/systemd-resolved.service
+ln -sf /usr/lib/systemd/system/iwd.service \
+    /etc/systemd/system/multi-user.target.wants/iwd.service
 
 # Single bottom taskbar (applications menu, window buttons, tray, clock, actions).
 # Replaces the stock two-panel default (top taskbar + bottom dock) for all new sessions.
@@ -110,6 +133,57 @@ menu-height=420
 RC
 install -Dm644 /root/.config/xfce4/panel/whiskermenu-1.rc /etc/skel/.config/xfce4/panel/whiskermenu-1.rc
 
+# fastfetch: use the Sigeon logo instead of the distro default. The full
+# modules list must be given explicitly -- a config that only sets "logo"
+# makes fastfetch drop every info line (including the OS one).
+mkdir -p /root/.config/fastfetch /etc/skel/.config/fastfetch
+cat > /root/.config/fastfetch/config.jsonc <<'FF'
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+  "logo": {
+    "source": "/usr/share/sigeonos/logo.txt",
+    "type": "file",
+    "padding": {
+      "top": 2,
+      "right": 2
+    }
+  },
+  "display": {
+    "separator": " -> "
+  },
+  "modules": [
+    "title",
+    "separator",
+    "os",
+    "host",
+    "kernel",
+    "uptime",
+    "packages",
+    "shell",
+    "display",
+    "de",
+    "theme",
+    "icons",
+    "font",
+    "cursor",
+    "terminal",
+    "terminalfont",
+    "cpu",
+    "gpu",
+    "memory",
+    "swap",
+    "disk",
+    "localip",
+    "battery",
+    "poweradapter",
+    "locale",
+    "break",
+    "colors"
+  ]
+}
+FF
+cp /root/.config/fastfetch/config.jsonc /etc/skel/.config/fastfetch/config.jsonc
+
 # xfdesktop 4.20 stores the backdrop under the real RandR monitor name
 # (e.g. "Virtual-1"), so the generic "monitor0" seed above is ignored.
 # Apply the wallpaper to the actual connected monitor at every login.
@@ -141,5 +215,45 @@ Exec=/usr/share/sigeonos/set-wallpaper.sh
 X-GNOME-Autostart-enabled=true
 NoDisplay=true
 DESK
+
+# Silence the X11 bell so terminals and GTK dialogs never beep.
+install -Dm644 /dev/stdin /etc/xdg/autostart/sigeonos-nobeep.desktop <<'DESK'
+[Desktop Entry]
+Type=Application
+Name=Disable System Bell
+Exec=xset b off
+X-GNOME-Autostart-enabled=true
+NoDisplay=true
+DESK
+
+# Make the Super (Windows) key open the Whisker start menu.
+# xfsettingsd can key a bare modifier in a custom shortcut; set it at every
+# login so it survives config resets, same pattern as the wallpaper script.
+install -Dm755 /dev/stdin /usr/share/sigeonos/set-superkey.sh <<'SH'
+#!/bin/bash
+xfconf-query -c xfce4-keyboard-shortcuts -n -t string \
+  -p "/commands/custom/Super_L" -s "xfce4-popup-whiskermenu"
+SH
+
+install -Dm644 /dev/stdin /etc/xdg/autostart/sigeonos-superkey.desktop <<'DESK'
+[Desktop Entry]
+Type=Application
+Name=Sigeon Super Key
+Exec=/usr/share/sigeonos/set-superkey.sh
+X-GNOME-Autostart-enabled=true
+NoDisplay=true
+DESK
+
+# Install the yay AUR helper (prebuilt binary from the upstream GitHub release).
+# The installed system's user is added to wheel with sudo by Calamares, which
+# is all yay needs. yay refuses to run as root, so it is a no-op on the live
+# root session and becomes usable after installation.
+YAY_VER=13.0.1
+TMP=$(mktemp -d)
+curl -fsSLo "$TMP/yay.tar.gz" \
+    "https://github.com/Jguer/yay/releases/download/v${YAY_VER}/yay_${YAY_VER}_x86_64.tar.gz"
+tar -xzf "$TMP/yay.tar.gz" -C "$TMP" "yay_${YAY_VER}_x86_64/yay"
+install -Dm755 "$TMP/yay_${YAY_VER}_x86_64/yay" /usr/bin/yay
+rm -rf "$TMP"
 
 exit 0

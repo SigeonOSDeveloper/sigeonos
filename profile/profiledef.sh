@@ -3,7 +3,7 @@
 
 iso_name="sigeonos"
 iso_label="SIGEONOS_$(date --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" +%Y%m)"
-iso_publisher="Sigeon OS <https://sigeonos.org>"
+iso_publisher="Sigeon OS <https://github.com/SigeonOSDeveloper>"
 iso_application="Sigeon OS Live/Rescue DVD"
 iso_version="$(date --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" +%Y.%m.%d)"
 install_dir="sigeonos"

@@ -1,7 +1,7 @@
 # Maintainer: Sigeon OS <https://github.com/SigeonOSDeveloper>
 pkgname=sigeon-apps
 pkgver=1.0.0
-pkgrel=13
+pkgrel=33
 pkgdesc="Sigeon OS first-party apps: Hello, Updater, Drivers, DaVinci installer and Flathub Store (GTK4)"
 arch=('x86_64')
 url="https://github.com/SigeonOSDeveloper"
@@ -27,6 +27,7 @@ source=(
 sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
 
 build() {
+  rm -rf build
   cmake -B build -G Ninja \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=/usr

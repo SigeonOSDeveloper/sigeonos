@@ -5,5 +5,5 @@ Comment=Update Sigeon OS safely (checks Arch news first)
 Exec=sigeon-updater
 Icon=sigeon-updater
 Terminal=false
-Categories=System;SoftwareSettings;X-Sigeon;
+Categories=System;X-Sigeon;
 StartupNotify=true

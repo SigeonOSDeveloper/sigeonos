@@ -1,0 +1,13 @@
+[Unit]
+Description=Restore pacman sync databases from the ISO stash
+After=local-fs.target
+Before=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/mkdir -p /var/lib/pacman/sync
+ExecStart=/usr/bin/cp -f /usr/share/sigeonos/pacman-sync/core.db /var/lib/pacman/sync/
+ExecStart=/usr/bin/cp -f /usr/share/sigeonos/pacman-sync/extra.db /var/lib/pacman/sync/
+
+[Install]
+WantedBy=multi-user.target

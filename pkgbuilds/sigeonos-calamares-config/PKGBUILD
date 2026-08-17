@@ -1,10 +1,10 @@
-# Maintainer: Sigeon OS Team <packager@sigeonos.org>
+# Maintainer: Sigeon OS <https://github.com/SigeonOSDeveloper>
 pkgname=sigeonos-calamares-config
 pkgver=1.0.0
-pkgrel=2
+pkgrel=9
 pkgdesc="Calamares installer configuration and branding for Sigeon OS"
 arch=('any')
-url="https://sigeonos.org"
+url="https://github.com/SigeonOSDeveloper"
 license=('GPL-3.0-or-later')
 depends=('calamares')
 source=(
@@ -20,15 +20,20 @@ source=(
   'module-preservefiles.conf'
   'module-services-systemd.conf'
   'module-shellprocess-cleanup.conf'
+  'module-shellprocess-bootmnt.conf'
+  'module-shellprocess-dearchiso.conf'
   'module-unpackfs.conf'
   'module-users.conf'
   'module-welcome.conf'
+  'mount-bootmnt.sh'
+  'dearchiso.sh'
+  'linux.preset'
   'branding.desc'
   'show.qml'
   'logo.png'
   'wallpaper.png'
 )
-sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
 
 package() {
   install -Dm644 "$srcdir/settings.conf" "$pkgdir/etc/calamares/settings.conf"
@@ -43,6 +48,11 @@ package() {
   install -Dm644 "$srcdir/module-preservefiles.conf" "$pkgdir/etc/calamares/modules/preservefiles.conf"
   install -Dm644 "$srcdir/module-services-systemd.conf" "$pkgdir/etc/calamares/modules/services-systemd.conf"
   install -Dm644 "$srcdir/module-shellprocess-cleanup.conf" "$pkgdir/etc/calamares/modules/shellprocess-cleanup.conf"
+  install -Dm644 "$srcdir/module-shellprocess-bootmnt.conf" "$pkgdir/etc/calamares/modules/shellprocess-bootmnt.conf"
+  install -Dm644 "$srcdir/module-shellprocess-dearchiso.conf" "$pkgdir/etc/calamares/modules/shellprocess-dearchiso.conf"
+  install -Dm755 "$srcdir/mount-bootmnt.sh" "$pkgdir/usr/local/bin/mount-bootmnt.sh"
+  install -Dm755 "$srcdir/dearchiso.sh" "$pkgdir/usr/local/bin/dearchiso.sh"
+  install -Dm644 "$srcdir/linux.preset" "$pkgdir/usr/share/sigeonos/linux.preset"
   install -Dm644 "$srcdir/module-unpackfs.conf" "$pkgdir/etc/calamares/modules/unpackfs.conf"
   install -Dm644 "$srcdir/module-users.conf" "$pkgdir/etc/calamares/modules/users.conf"
   install -Dm644 "$srcdir/module-welcome.conf" "$pkgdir/etc/calamares/modules/welcome.conf"

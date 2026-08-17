@@ -41,9 +41,12 @@ static Gtk::Button* make_card(const Glib::ustring& icon,
 }
 
 static void open_app(const Glib::ustring& argv0) {
-    std::thread([argv0] {
-        sig::run_capture({argv0.raw() + " >/dev/null 2>&1 &"});
-    }).detach();
+    try {
+        Glib::spawn_command_line_async(argv0);
+    } catch (const Glib::Error& e) {
+        std::fprintf(stderr, "sigeon-hello: could not launch %s: %s\n",
+                     argv0.c_str(), e.what());
+    }
 }
 
 // User-level autostart override for the Welcome window.
