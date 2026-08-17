@@ -185,6 +185,7 @@ section h2::before {
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 20px var(--accent-glow);
 }
 .dl-meta { margin-bottom: 1.2rem; }
+.dl-buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
 .dl-version { display: block; font-weight: 700; font-size: 1.1rem; }
 .dl-size { color: var(--muted); font-size: 0.9rem; }
 .checksum { margin-top: 1.4rem; color: var(--muted); font-size: 0.85rem; word-break: break-all; }
